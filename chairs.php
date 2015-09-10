@@ -30,8 +30,11 @@ while($chairs_total > 0){
 
   // next time skip more chairs
   $chairs_to_skip += $chairs_skip_increment;
-  break;
 }
-print_r($chairs_circle);
-print_r($chairs_sequence);
 
+echo "The Survivor is: " . $chairs_sequence[count($chairs_sequence) - 1] . "\r\n\r\n";
+
+echo "The Order of who left the room is:\r\n";
+foreach($chairs_sequence as $key => $chair_number){
+  echo "#" . ($key + 1) . ": $chair_number\r\n";
+}
