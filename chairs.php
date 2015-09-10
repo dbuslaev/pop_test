@@ -9,16 +9,29 @@ At some point in time, the person in chair #1 will be told to leave the room. Th
 $chairs_total = 100;
 $chairs_skip_increment = 1;
 
-$chairs_circle = array();
-$chairs_circle = array_fill(0, $chairs_total, 1);
-$chairs_removed = 0;
+$chairs_circle = range(1, $chairs_total);
 $chairs_current = 0;
-$chairs_skipped = 0;
+$chairs_to_skip = 0;
 $chairs_sequence = array();
 
 // the last chair removed will be the number we want
-while($chairs_removed < $chairs_total){
+while($chairs_total > 0){
+  // find the next person to leave the room
+  $chairs_current += $chairs_to_skip;
+  if($chairs_current >= $chairs_total) $chairs_current = $chairs_current % $chairs_total;
+
+  // track removed chairs
+  $chairs_sequence[] = $chairs_circle[$chairs_current];
   
+  // chair is removed
+  unset($chairs_circle[$chairs_current]);
+  $chairs_circle = array_values($chairs_circle);
+  $chairs_total --;
+
+  // next time skip more chairs
+  $chairs_to_skip += $chairs_skip_increment;
   break;
 }
 print_r($chairs_circle);
+print_r($chairs_sequence);
+
