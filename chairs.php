@@ -6,35 +6,37 @@ At some point in time, the person in chair #1 will be told to leave the room. Th
 */
 
 // changable parameters
-$chairs_total = 100;
-$chairs_skip_increment = 1;
-
-$chairs_circle = range(1, $chairs_total);
-$chairs_current = 0;
-$chairs_to_skip = 0;
-$chairs_sequence = array();
-
-// the last chair removed will be the number we want
-while($chairs_total > 0){
-  // find the next person to leave the room
-  $chairs_current += $chairs_to_skip;
-  if($chairs_current >= $chairs_total) $chairs_current = $chairs_current % $chairs_total;
-
-  // track removed chairs
-  $chairs_sequence[] = $chairs_circle[$chairs_current];
+function find_survivor_sequence($chairs_total = 100, $chairs_skip_increment = 1){
+  $chairs_circle = range(1, $chairs_total);
+  $chairs_current = 0;
+  $chairs_to_skip = 0;
+  $chairs_sequence = [];
   
-  // chair is removed
-  unset($chairs_circle[$chairs_current]);
-  $chairs_circle = array_values($chairs_circle);
-  $chairs_total --;
-
-  // next time skip more chairs
-  $chairs_to_skip += $chairs_skip_increment;
+  // the last chair removed will be the number we want
+  while($chairs_total > 0){
+    // find the next person to leave the room
+    $chairs_current += $chairs_to_skip;
+    if($chairs_current >= $chairs_total) $chairs_current = $chairs_current % $chairs_total;
+  
+    // track removed chairs
+    $chairs_sequence[] = $chairs_circle[$chairs_current];
+    
+    // chair is removed
+    unset($chairs_circle[$chairs_current]);
+    $chairs_circle = array_values($chairs_circle);
+    $chairs_total --;
+  
+    // next time skip more chairs
+    $chairs_to_skip += $chairs_skip_increment;
+  }
+  return $chairs_sequence;
 }
 
-echo "The Survivor is: " . $chairs_sequence[count($chairs_sequence) - 1] . "\r\n\r\n";
+$chairs_sequence=find_survivor_sequence();
+$survivor = array_pop($chairs_sequence);
+echo "The Survivor is: " . $survivor . PHP_EOL . PHP_EOL;
 
-echo "The Order of who left the room is:\r\n";
+echo "The Order of who left the room is:" . PHP_EOL;
 foreach($chairs_sequence as $key => $chair_number){
-  echo "#" . ($key + 1) . ": $chair_number\r\n";
+  echo "#" . ($key + 1) . ": ".$chair_number . PHP_EOL;
 }
